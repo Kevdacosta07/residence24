@@ -102,7 +102,9 @@ Fichiers fournis:
 - `Dockerfile`: image Next.js 16 en mode `output: "standalone"`
 - `docker-compose.yml`: service `residence24` exposé uniquement sur `127.0.0.1:3000`
 - `.github/workflows/deploy.yml`: build CI, transfert `rsync`, puis `docker compose up -d --build --remove-orphans`
-- `deploy/nginx/residence24.conf`: exemple de vhost Nginx pour `residence24.ch` et `www.residence24.ch`
+- `deploy/nginx/residence24.conf`: vhost Nginx complet pour `residence24.ch` et `www.residence24.ch`, avec redirection HTTPS et canonisation vers l'apex
+
+Si votre VPS utilise deja un conteneur reverse proxy avec Let's Encrypt, `docker-compose.yml` declare aussi directement le virtual host via `VIRTUAL_HOST=residence24.ch,www.residence24.ch`, `LETSENCRYPT_HOST=residence24.ch,www.residence24.ch` et raccorde l'application au reseau Docker `proxy`.
 
 Arborescence VPS attendue:
 
@@ -136,11 +138,14 @@ sudo mkdir -p /srv/residence24
 sudo chown -R $USER:$USER /srv/residence24
 cp deploy/nginx/residence24.conf /etc/nginx/sites-available/residence24.conf
 sudo ln -s /etc/nginx/sites-available/residence24.conf /etc/nginx/sites-enabled/residence24.conf
+sudo certbot --nginx -d residence24.ch -d www.residence24.ch
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-Le reverse proxy Nginx envoie le trafic vers `127.0.0.1:3000`, ce qui correspond au `docker-compose.yml` fourni. Le fichier `src/proxy.ts` redirige `www.residence24.ch` vers le domaine canonique `residence24.ch`.
+Si vous utilisez un proxy Nginx/Let's Encrypt en conteneurs, gardez `docker-compose.yml` sur le reseau externe `proxy` et laissez ce proxy lire `VIRTUAL_HOST`, `LETSENCRYPT_HOST`, `LETSENCRYPT_EMAIL` et `VIRTUAL_PORT=3000` depuis le service `residence24`.
+
+Si vous utilisez Nginx directement sur l'hote, le vhost fourni redirige HTTP vers HTTPS, redirige `www.residence24.ch` vers `residence24.ch`, puis envoie le trafic applicatif vers `127.0.0.1:3000`, ce qui correspond au `docker-compose.yml` fourni. Le fichier `src/proxy.ts` conserve aussi la redirection applicative vers le domaine canonique `residence24.ch`.
 
 ## Checklist avant publication
 
