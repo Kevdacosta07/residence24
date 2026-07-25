@@ -1,0 +1,72 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VPS_PORT: ${{ secrets.VPS_PORT != '' && secrets.VPS_PORT || '22' }}
+      VPS_TARGET_DIR: ${{ secrets.VPS_TARGET_DIR }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+
+      - name: Add VPS host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "$VPS_PORT" -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Ensure remote directory exists
+        run: |
+          ssh -p "$VPS_PORT" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p '$VPS_TARGET_DIR'"
+
+      - name: Sync project to VPS with rsync
+        run: |
+          rsync -az --delete \
+            -e "ssh -p $VPS_PORT" \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            --exclude ".next/" \
+            --exclude "node_modules/" \
+            --exclude ".env" \
+            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:$VPS_TARGET_DIR/"
+
+      - name: Run remote Docker deployment
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          port: ${{ env.VPS_PORT }}
+          script_stop: true
+          script: |
+            set -eu
+            cd "$VPS_TARGET_DIR"
+            docker compose up -d --build --remove-orphans
