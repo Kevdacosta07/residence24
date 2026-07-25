@@ -33,6 +33,35 @@ jobs:
       - name: Build application
         run: npm run build
 
+      - name: Resolve safe deploy directory
+        shell: bash
+        run: |
+          set -eu
+
+          target_dir="${VPS_TARGET_DIR%/}"
+
+          if [ -z "$target_dir" ]; then
+            echo "::error::VPS_TARGET_DIR is required."
+            exit 1
+          fi
+
+          if [ "$target_dir" = "/" ]; then
+            deploy_dir="/residence24"
+          elif [ "${target_dir##*/}" = "residence24" ]; then
+            deploy_dir="$target_dir"
+          else
+            deploy_dir="$target_dir/residence24"
+          fi
+
+          case "$deploy_dir" in
+            /|/etc|/usr|/var|/var/www|/srv|/opt|/home|/root)
+              echo "::error::Resolved deploy directory '$deploy_dir' is too broad. Point VPS_TARGET_DIR to a parent or dedicated residence24 directory."
+              exit 1
+              ;;
+          esac
+
+          echo "DEPLOY_DIR=$deploy_dir" >> "$GITHUB_ENV"
+
       - name: Start SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -45,18 +74,19 @@ jobs:
 
       - name: Ensure remote directory exists
         run: |
-          ssh -p "$VPS_PORT" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p '$VPS_TARGET_DIR'"
+          ssh -p "$VPS_PORT" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "sudo mkdir -p '$DEPLOY_DIR' && sudo chown -R '${{ secrets.VPS_USER }}:${{ secrets.VPS_USER }}' '$DEPLOY_DIR'"
 
       - name: Sync project to VPS with rsync
         run: |
-          rsync -az --delete \
+          rsync -az --delete --omit-dir-times --no-perms --no-owner --no-group \
             -e "ssh -p $VPS_PORT" \
+            --rsync-path="sudo rsync" \
             --exclude ".git/" \
             --exclude ".github/" \
             --exclude ".next/" \
             --exclude "node_modules/" \
             --exclude ".env" \
-            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:$VPS_TARGET_DIR/"
+            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:$DEPLOY_DIR/"
 
       - name: Run remote Docker deployment
         uses: appleboy/ssh-action@v1.2.0
@@ -65,8 +95,11 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           port: ${{ env.VPS_PORT }}
+          envs: DEPLOY_DIR
           script_stop: true
           script: |
             set -eu
-            cd "$VPS_TARGET_DIR"
-            docker compose up -d --build --remove-orphans
+            sudo mkdir -p "$DEPLOY_DIR"
+            sudo chown -R "${{ secrets.VPS_USER }}:${{ secrets.VPS_USER }}" "$DEPLOY_DIR"
+            cd "$DEPLOY_DIR"
+            sudo docker compose up -d --build --remove-orphans

@@ -117,7 +117,9 @@ Arborescence VPS attendue:
   src/
 ```
 
-Le workflow reste piloté par le secret GitHub `VPS_TARGET_DIR`. Si votre projet vit ailleurs, utilisez simplement ce chemin.
+Le workflow reste piloté par le secret GitHub `VPS_TARGET_DIR`. S'il pointe deja vers un dossier `residence24`, il sera utilise tel quel. Sinon, le workflow deploie automatiquement dans un sous-dossier `residence24` pour eviter que `rsync --delete` touche d'autres services du VPS.
+
+Le workflow prepare aussi ce dossier avec `sudo`, execute `rsync` via `sudo rsync` cote serveur et lance `sudo docker compose up -d --build --remove-orphans`.
 
 Secrets GitHub requis:
 
