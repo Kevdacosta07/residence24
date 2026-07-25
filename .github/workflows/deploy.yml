@@ -16,7 +16,7 @@ jobs:
     env:
       VPS_PORT: ${{ secrets.VPS_PORT != '' && secrets.VPS_PORT || '22' }}
       VPS_TARGET_DIR: ${{ secrets.VPS_TARGET_DIR }}
-      PROXY_NETWORK: ${{ secrets.PROXY_NETWORK != '' && secrets.PROXY_NETWORK || 'proxy' }}
+      PROXY_NETWORK: ${{ secrets.PROXY_NETWORK != '' && secrets.PROXY_NETWORK || 'nginx-proxy' }}
 
     steps:
       - name: Checkout repository
