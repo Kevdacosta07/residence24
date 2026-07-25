@@ -122,6 +122,7 @@ Arborescence VPS attendue:
 Le workflow reste piloté par le secret GitHub `VPS_TARGET_DIR`. S'il pointe deja vers un dossier `residence24`, il sera utilise tel quel. Sinon, le workflow deploie automatiquement dans un sous-dossier `residence24` pour eviter que `rsync --delete` touche d'autres services du VPS.
 
 Le workflow prepare aussi ce dossier avec `sudo`, execute `rsync` via `sudo rsync` cote serveur et lance `sudo docker compose up -d --build --remove-orphans`.
+S'il manque encore le reseau Docker externe du proxy, le workflow le cree automatiquement avant le `docker compose up`.
 
 Secrets GitHub requis:
 
@@ -130,6 +131,7 @@ Secrets GitHub requis:
 - `VPS_SSH_PRIVATE_KEY`
 - `VPS_TARGET_DIR`
 - `VPS_PORT` optionnel, sinon `22`
+- `PROXY_NETWORK` optionnel, sinon `proxy`
 
 Exemple de mise en place sur le VPS:
 
@@ -143,7 +145,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-Si vous utilisez un proxy Nginx/Let's Encrypt en conteneurs, gardez `docker-compose.yml` sur le reseau externe `proxy` et laissez ce proxy lire `VIRTUAL_HOST`, `LETSENCRYPT_HOST`, `LETSENCRYPT_EMAIL` et `VIRTUAL_PORT=3000` depuis le service `residence24`.
+Si vous utilisez un proxy Nginx/Let's Encrypt en conteneurs, gardez `docker-compose.yml` sur le reseau externe `proxy` ou renseignez `PROXY_NETWORK` avec le vrai nom du reseau partage par votre proxy. Le workflow cree ce reseau s'il n'existe pas encore et laisse ensuite le proxy lire `VIRTUAL_HOST`, `LETSENCRYPT_HOST`, `LETSENCRYPT_EMAIL` et `VIRTUAL_PORT=3000` depuis le service `residence24`.
 
 Si vous utilisez Nginx directement sur l'hote, le vhost fourni redirige HTTP vers HTTPS, redirige `www.residence24.ch` vers `residence24.ch`, puis envoie le trafic applicatif vers `127.0.0.1:3000`, ce qui correspond au `docker-compose.yml` fourni. Le fichier `src/proxy.ts` conserve aussi la redirection applicative vers le domaine canonique `residence24.ch`.
 

@@ -16,6 +16,7 @@ jobs:
     env:
       VPS_PORT: ${{ secrets.VPS_PORT != '' && secrets.VPS_PORT || '22' }}
       VPS_TARGET_DIR: ${{ secrets.VPS_TARGET_DIR }}
+      PROXY_NETWORK: ${{ secrets.PROXY_NETWORK != '' && secrets.PROXY_NETWORK || 'proxy' }}
 
     steps:
       - name: Checkout repository
@@ -95,11 +96,12 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           port: ${{ env.VPS_PORT }}
-          envs: DEPLOY_DIR
+          envs: DEPLOY_DIR,PROXY_NETWORK
           script_stop: true
           script: |
             set -eu
             sudo mkdir -p "$DEPLOY_DIR"
             sudo chown -R "${{ secrets.VPS_USER }}:${{ secrets.VPS_USER }}" "$DEPLOY_DIR"
+            sudo docker network inspect "$PROXY_NETWORK" >/dev/null 2>&1 || sudo docker network create "$PROXY_NETWORK"
             cd "$DEPLOY_DIR"
-            sudo docker compose up -d --build --remove-orphans
+            sudo env PROXY_NETWORK="$PROXY_NETWORK" docker compose up -d --build --remove-orphans
