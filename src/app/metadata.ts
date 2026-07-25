@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { toCdnAsset } from "@/lib/cdn";
 
 const title = "Residence24 | Intendance privée à Genève";
 const description = "Intendance privée à Genève pour villa, appartement ou résidence secondaire : visites, coordination des prestataires et suivi pendant vos absences.";
@@ -44,6 +45,10 @@ export const siteMetadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
   },
-  icons: { icon: "/icon.svg", apple: "/app-icon.svg", shortcut: "/icon.svg" },
+  icons: {
+    icon: toCdnAsset("/icon.svg"),
+    apple: toCdnAsset("/app-icon.svg"),
+    shortcut: toCdnAsset("/icon.svg"),
+  },
   manifest: "/manifest.webmanifest",
 };

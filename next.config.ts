@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
+    loader: "custom",
+    loaderFile: "./src/lib/imagekit-loader.ts",
     qualities: [75, 90],
     formats: ["image/avif", "image/webp"],
   },

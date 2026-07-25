@@ -13,27 +13,43 @@ export default function Home() {
       <Header />
       <main id="contenu">
         <section className="hero" id="accueil" aria-labelledby="hero-title">
-          <div className="hero__media">
-            <Image
-              src="/images/residence-interior.jpg"
-              alt="Intérieur lumineux d’une résidence privée entretenue avec soin"
-              fill
-              priority
-              sizes="100vw"
-              className="hero__image"
-            />
-            <div className="hero__shade" />
-          </div>
-          <div className="container hero__inner">
-            <div className="hero__content">
-              <p className="hero__eyebrow hero__reveal hero__reveal--1">Intendance privée · Genève</p>
-              <h1 id="hero-title" className="hero__reveal hero__reveal--2">Votre résidence,<br /><em>entre de bonnes mains.</em></h1>
-              <p className="hero__lead hero__reveal hero__reveal--3">Residence24 veille personnellement sur votre propriété pendant vos absences, avec une présence régulière et un interlocuteur unique.</p>
-              <div className="hero__actions hero__reveal hero__reveal--4">
-                <a className="hero__phone" href="tel:+41765534154"><Phone size={16} /> +41 76 553 41 54</a>
+          <div className="hero__canvas">
+            <div className="hero__copy">
+              <div className="hero__content">
+                <div className="hero__index hero__reveal hero__reveal--1">
+                  <strong>01</strong>
+                  <p>Intendance privée<br /><span>Genève · Suisse</span></p>
+                </div>
+                <h1 id="hero-title" className="hero__reveal hero__reveal--2"><span>Vous partez.</span><em>Rien ne s’arrête.</em></h1>
+                <div className="hero__manifesto hero__reveal hero__reveal--3">
+                  <p>Votre résidence continue de vivre, même en votre absence.</p>
+                  <span>Un intendant dédié veille, coordonne et vous tient informé.</span>
+                </div>
+                <a className="hero__phone hero__reveal hero__reveal--4" href="tel:+41765534154">
+                  <Phone size={18} />
+                  <span><small>Appeler Residence24</small><strong>+41 76 553 41 54</strong></span>
+                  <ArrowUpRight size={18} />
+                </a>
+              </div>
+              <a className="hero__corner-link" href="#intendance"><span>Découvrir<br />notre approche</span><ArrowUpRight size={18} /></a>
+              <p className="hero__vertical-mark" aria-hidden="true">Residence24 · Présence locale</p>
+            </div>
+            <div className="hero__visual">
+              <Image
+                src="/images/hero-villa.jpg"
+                alt="Villa contemporaine illuminée suivie par Residence24"
+                fill
+                priority
+                sizes="100vw"
+                className="hero__image"
+              />
+              <p className="hero__location"><span /> Genève et alentours</p>
+              <div className="hero__brand-panel" aria-hidden="true">
+                <span>Residence</span>
+                <strong>24</strong>
+                <i>Genève</i>
               </div>
             </div>
-            <a className="hero__scroll hero__reveal hero__reveal--5" href="#intendance"><span />Découvrir notre accompagnement</a>
           </div>
         </section>
 
@@ -63,7 +79,7 @@ export default function Home() {
             <a href="#contact">Parler de votre résidence <ArrowUpRight size={17} /></a>
           </div>
         </Reveal>
-        <Reveal className="container footer__bottom" delay={0.08}>
+        <div className="container footer__bottom">
           <nav aria-label="Navigation secondaire">
             <a href="#intendance">L’intendance</a>
             <a href="#services">Prestations</a>
@@ -76,7 +92,7 @@ export default function Home() {
             <span>Genève · Suisse</span>
           </div>
           <a className="footer__top-link" href="#accueil" aria-label="Retour en haut"><ArrowUpRight size={15} /></a>
-        </Reveal>
+        </div>
       </footer>
     </>
   );

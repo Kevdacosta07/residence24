@@ -143,10 +143,10 @@ export function HomeSections() {
               {values.map((value, index) => {
                 const Icon = value.icon;
                 return (
-                  <Reveal className="trust-item" delay={index * 0.05} key={value.title}>
+                  <div className="trust-item" key={value.title}>
                     <div className="trust-item__icon"><Icon size={20} /></div>
                     <div><span>0{index + 1}</span><h3>{value.title}</h3><p>{value.text}</p></div>
-                  </Reveal>
+                  </div>
                 );
               })}
             </div>

@@ -1,4 +1,5 @@
 import { faqs, services } from "./content";
+import { toCdnAsset } from "./cdn";
 
 const siteUrl = "https://residence24.ch";
 
@@ -34,8 +35,8 @@ export const residence24Schema = {
       "@id": `${siteUrl}/#business`,
       name: "Residence24",
       url: siteUrl,
-      image: `${siteUrl}/images/residence-interior.jpg`,
-      logo: `${siteUrl}/logo-black.svg`,
+      image: toCdnAsset("/images/residence-interior.jpg"),
+      logo: toCdnAsset("/logo-black.svg"),
       email: "contact@residence24.ch",
       telephone: "+41 76 553 41 54",
       description: "Intendance privée pour villas, appartements et résidences secondaires à Genève : visites, coordination des prestataires et préparation des retours.",

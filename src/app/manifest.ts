@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { toCdnAsset } from "@/lib/cdn";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -11,8 +12,8 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#0B0B0B",
     lang: "fr-CH",
     icons: [
-      { src: "/app-icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
-      { src: "/app-icon-maskable.svg", sizes: "any", type: "image/svg+xml", purpose: "maskable" },
+      { src: toCdnAsset("/app-icon.svg"), sizes: "any", type: "image/svg+xml", purpose: "any" },
+      { src: toCdnAsset("/app-icon-maskable.svg"), sizes: "any", type: "image/svg+xml", purpose: "maskable" },
     ],
   };
 }
