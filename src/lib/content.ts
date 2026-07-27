@@ -7,7 +7,6 @@ import {
   PawPrint,
   ScanEye,
   ShieldCheck,
-  Truck,
   UsersRound,
   Wrench,
 } from "lucide-react";
@@ -116,12 +115,22 @@ export const faqs = [
   {
     question: "Qu'est-ce que l'intendance privée pour une résidence à Genève?",
     answer:
-      "L'intendance privée consiste à confier les visites, le suivi courant et la coordination de votre résidence à un interlocuteur dédié pendant vos absences. Residence24 organise les passages selon vos consignes, coordonne les intervenants et vous transmet un compte rendu après chaque visite.",
+      "L'intendance privée à Genève consiste à confier les passages, le suivi courant et la coordination de votre résidence à un interlocuteur dédié pendant vos absences. Residence24 organise les visites selon vos consignes, vérifie les points essentiels, coordonne les intervenants et vous transmet un compte rendu après chaque passage.",
   },
   {
     question: "Qui peut s'occuper d'une villa ou d'une résidence secondaire pendant une absence à Genève?",
     answer:
-      "Residence24 accompagne les propriétaires de villas, appartements et résidences secondaires à Genève. Le service est adapté à la fréquence de vos absences, aux particularités de la propriété, aux accès, aux animaux et aux prestataires à coordonner.",
+      "Residence24 s'occupe des villas, appartements et résidences secondaires à Genève pendant les absences des propriétaires. Le service s'adapte à la durée de votre déplacement, aux accès, aux animaux, aux plantes, aux livraisons et aux prestataires à coordonner sur place.",
+  },
+  {
+    question: "Quelle différence entre intendance privée, home sitting et conciergerie privée?",
+    answer:
+      "L'intendance privée Residence24 combine présence résidentielle, home sitting et coordination opérationnelle. Contrairement à une conciergerie transactionnelle, l'objectif est de faire vivre la résidence avec un protocole continu : visites, vérifications, suivi des prestataires, soin du cadre de vie et préparation du retour.",
+  },
+  {
+    question: "Quels services sont inclus dans la gestion d'une résidence à Genève?",
+    answer:
+      "Selon le protocole convenu, la gestion de résidence inclut les passages réguliers, l'aération, la vérification des accès, le suivi des installations, la relève du courrier, la réception de livraisons, le soin des animaux et végétaux, la coordination des artisans et la préparation de la résidence avant votre arrivée.",
   },
   {
     question: "Residence24 est-elle une société de sécurité?",
@@ -156,6 +165,6 @@ export const faqs = [
   {
     question: "Quelles sont les zones desservies dans le canton de Genève?",
     answer:
-      "Nous intervenons sur l'ensemble du canton de Genève, notamment à Cologny, Collonge-Bellerive, Vandoeuvres, Chêne-Bougeries, Bellevue, Genthod, Pregny-Chambésy et Genève-Ville.",
+      "Residence24 intervient dans le canton de Genève, notamment à Genève-Ville, Cologny, Collonge-Bellerive, Vandoeuvres, Chêne-Bougeries, Bellevue, Genthod, Pregny-Chambésy, Anières et les communes résidentielles voisines selon la mission.",
   },
 ];

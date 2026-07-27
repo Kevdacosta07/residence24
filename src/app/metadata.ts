@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { toCdnAsset } from "@/lib/cdn";
 
-const title = "Residence24 | Intendance privée à Genève";
-const description = "Intendance privée à Genève pour villa, appartement ou résidence secondaire : visites, coordination des prestataires et suivi pendant vos absences.";
+const title = "Residence24 | Intendance privée et gestion de résidence à Genève";
+const description = "Intendance privée à Genève pour villa, appartement ou résidence secondaire : passages, home sitting, coordination des prestataires, animaux et préparation de votre retour.";
 
 export const siteMetadata: Metadata = {
   metadataBase: new URL("https://residence24.ch"),
@@ -17,12 +17,16 @@ export const siteMetadata: Metadata = {
     "gestion résidence Genève",
     "gestion résidence secondaire Genève",
     "intendance villa Genève",
+    "gestion villa Genève",
     "gestion maison Genève",
     "gestion propriété Genève",
+    "service intendance Genève",
     "home sitting Genève",
     "house sitting Genève",
     "présence domicile Genève",
+    "qui s'occupe de ma maison pendant mon absence Genève",
     "surveillance maison absence Genève",
+    "préparer résidence secondaire avant retour Genève",
     "coordination artisans Genève",
     "villa Genève",
   ],
