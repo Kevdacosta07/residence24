@@ -67,6 +67,8 @@ p { color: var(--muted); }
 .header-cta svg { color: var(--ink); }
 .icon-button { display: grid; width: 40px; height: 40px; place-items: center; border: 0; background: transparent; color: #fff; }
 .menu-button { display: none; }
+.site-header .menu-button { border: 1px solid rgba(255,255,255,.16); border-radius: 999px; background: rgba(9,10,8,.9); box-shadow: 0 10px 24px rgba(0,0,0,.2); }
+.site-header .menu-button:hover { background: rgba(18,20,16,.96); }
 #contenu { padding-top: 0; }
 
 /* Hero */
